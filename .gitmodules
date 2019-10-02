@@ -1,0 +1,3 @@
+[submodule "src/lpc21isp"]
+	path = src/lpc21isp
+	url = git@github.com:dbisk/lpc21isp.git
