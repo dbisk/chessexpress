@@ -1,6 +1,11 @@
 # editor settings
 **/.vscode
 
+# keil uvision temp files
+*.uvgui
+**/Listings
+**/Objects
+
 # Prerequisites
 *.d
 
