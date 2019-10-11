@@ -3,28 +3,10 @@
 #include <rt_misc.h>
 
 /* include user defined files */
-#include "mcu.h"
+#include "mcu/mcu.h"
 
 /* Import external functions from Serial.c file                               */
 extern void SER_init (void);
-
-void configureGPIO()
-{
-	//set port 0_7 to output (high current drain in LPC1114)
-  LPC_GPIO0->DIR |= (1<<STEP_STP);
-	LPC_GPIO0->DIR |= (1<<STEP_DIR);
-	LPC_GPIO0->DIR |= (1<<STEP_MS1);
-	LPC_GPIO0->DIR |= (1<<STEP_MS2);
-	LPC_GPIO0->DIR |= (1<<STEP_EN);
-}
-
-void resetEDPins() {
-	LPC_GPIO0->DATA &= ~(1 << STEP_STP);
-	LPC_GPIO0->DATA &= ~(1 << STEP_DIR);
-	LPC_GPIO0->DATA &= ~(1 << STEP_MS1);
-	LPC_GPIO0->DATA &= ~(1 << STEP_MS2);
-	LPC_GPIO0->DATA |= (1 <<  STEP_EN);
-}
 
 void setLow(int pin)
 {
@@ -38,19 +20,19 @@ void setHigh(int pin)
 
 int main()
 {
-	configureGPIO();
-	resetEDPins();
+	// configureGPIO();
+	// resetEDPins();
 	
 	// enable the motor control
-	setLow(STEP_EN);
+	// setLow(STEP_EN);
 	
 	// Move the stepper motor forward
-	setLow(STEP_DIR); // pull dir pin low
+	// setLow(STEP_DIR); // pull dir pin low
 	while(1) {
-		setHigh(STEP_STP);
+		// setHigh(STEP_STP);
 		int i;
 		for (i = 0; i < 0xFFFFF; i++) {}
-		setLow(STEP_STP);
+		// setLow(STEP_STP);
 		for (i = 0; i < 0xFFFFF; i++) {}
 	}
 	

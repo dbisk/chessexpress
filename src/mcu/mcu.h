@@ -11,12 +11,19 @@
 #define _MOTOR_MCU_H_
 
 /* define pins for the motor control signals */
-/* these are all on GPIO0. AVOID USING PINS 0,1,4,5, and 10 */
-#define STEP_STP  2
-#define STEP_DIR  3
-#define STEP_MS1  6
-#define STEP_MS2  8
-#define STEP_EN   9
+/* on GPIO0, avoid pins 0, 1, 4, 5, and 10 */
+#define GPIO0_STEP_STP  2
+#define GPIO0_STEP_DIR  3
+#define GPIO0_STEP_MS1  6
+#define GPIO0_STEP_MS2  8
+#define GPIO0_STEP_EN   9
+
+/* on GPIO1, avoid pins 4, 5, 6, and 7 */
+#define GPIO1_STEP_STP  0
+#define GPIO1_STEP_DIR  1
+#define GPIO1_STEP_MS1  2
+#define GPIO1_STEP_MS2  3
+#define GPIO1_STEP_EN   8
 
 /* define other useful things for motor control */
 #define X_AXIS    0
@@ -30,6 +37,7 @@
  * This function configures the GPIO pins for the given axis of motion. 
  * 
  * @param axis - the axis whose motor controls should be configured
+ * @returns 1 if valid axis, 0 otherwise
  */
 int configureGPIO(int axis);
 
@@ -39,6 +47,7 @@ int configureGPIO(int axis);
  * This function configures the ED pins to their defaults for the given axis.
  * 
  * @param axis - the axis whose motor controls should be configured
+ * @returns 1 if valid axis, 0 otherwise
  */
 int resetEDPins(int axis);
 

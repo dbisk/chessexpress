@@ -2,7 +2,7 @@
 **/.vscode
 
 # keil uvision temp files
-*.uvgui
+*.uvgui.*
 **/Listings
 **/Objects
 
