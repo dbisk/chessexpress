@@ -8,6 +8,7 @@
  */
 #include "LPC11xx.h"
 #include "mcu.h"
+#include "lpc_utils.h"
 
 int configureGPIO(int axis) {
   if (axis == X_AXIS) {
@@ -48,5 +49,23 @@ int resetEDPins(int axis) {
 }
 
 int moveMotor(int axis, int distance, int direction) {
-  return 1;
+  // assume GPIOs have been configured
+  if (axis == X_AXIS) {
+    setPinGPIO0(GPIO0_STEP_EN, PIN_LOW); // enable the motor control
+    setPinGPIO0(GPIO0_STEP_DIR, direction); // set the direction
+    while (distance < 0) { // @TODO: change this to include distance
+      setHigh(GPIO0_STEP_STP);
+      lpcWait(0x0FFFF); // @TODO: test this time
+      setLow(GPIO0_STEP_STP);
+      lpcWait(0x0FFFF);
+    }
+  } else if (axis == Y_AXIS) {
+    // @TODO: Should be the same as X_AXIS but with GPIO1
+  } else {
+    return 0; // invalid axis
+  }
+
+  // reset the ED pins to their default state
+  resetEDPins(axis);
+  return 1; // success
 }

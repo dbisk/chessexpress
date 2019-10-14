@@ -8,35 +8,15 @@
 /* Import external functions from Serial.c file                               */
 extern void SER_init (void);
 
-void setLow(int pin)
-{
-	LPC_GPIO0->DATA &= ~(1<<pin);
+/* initialization sequence */
+void initialize() {
+	SER_init();
+	configureGPIO(X_AXIS);
+	configureGPIO(Y_AXIS);
 }
 
-void setHigh(int pin)
-{						 
-	LPC_GPIO0->DATA |= (1<<pin);
-}
-
-int main()
-{
-	// configureGPIO();
-	// resetEDPins();
-	
-	// enable the motor control
-	// setLow(STEP_EN);
-	
-	// Move the stepper motor forward
-	// setLow(STEP_DIR); // pull dir pin low
-	while(1) {
-		// setHigh(STEP_STP);
-		int i;
-		for (i = 0; i < 0xFFFFF; i++) {}
-		// setLow(STEP_STP);
-		for (i = 0; i < 0xFFFFF; i++) {}
-	}
-	
-	
+int main() {
+	initialize();
 	/*int i, j = 0;
 	SER_init();
 	configureGPIO();

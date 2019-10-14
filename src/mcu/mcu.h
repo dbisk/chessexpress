@@ -26,10 +26,14 @@
 #define GPIO1_STEP_EN   8
 
 /* define other useful things for motor control */
-#define X_AXIS    0
-#define Y_AXIS    1
-#define FORWARD   0
-#define BACKWARDS 1
+#define X_AXIS          0
+#define Y_AXIS          1
+#define FORWARD         0
+#define BACKWARD        1
+
+/* define stepper motor distances */
+#define HALF_SQUARE     323
+#define FULL_SQUARE     (HALF_SQUARE * 2 + 1)
 
 /**
  * configureGPIO(int axis)
@@ -58,7 +62,8 @@ int resetEDPins(int axis);
  * the given direction.
  * 
  * @param axis - the axis whose motors will move
- * @param distance - the distance to move, in half-squares
+ * @param distance - the distance to move, in half-squares. If negative, will
+ *                   move indefinitely.
  * @param direction - the direction to move
  */
 int moveMotor(int axis, int distance, int direction);
