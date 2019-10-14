@@ -18,12 +18,12 @@
 #define GPIO0_STEP_MS2  8
 #define GPIO0_STEP_EN   9
 
-/* on GPIO1, avoid pins 4, 5, 6, and 7 */
+/* on GPIO1, avoid pins 3, 4, 5, 6, and 7 */
 #define GPIO1_STEP_STP  0
 #define GPIO1_STEP_DIR  1
 #define GPIO1_STEP_MS1  2
-#define GPIO1_STEP_MS2  3
-#define GPIO1_STEP_EN   8
+#define GPIO1_STEP_MS2  8
+#define GPIO1_STEP_EN   9
 
 /* define other useful things for motor control */
 #define X_AXIS          0

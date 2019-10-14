@@ -17,6 +17,12 @@ void initialize() {
 
 int main() {
 	initialize();
+  // TESTING
+  moveMotor(X_AXIS, 8, BACKWARD); // move 4 half squares forward
+  // moveMotor(X_AXIS, 8, BACKWARD); // move 8 half squares backward
+  int i = 0;
+  for (i = 0; i < 0xFFFFFF; i++) ;
+  moveMotor(X_AXIS, -1, FORWARD); // move indefinitely
 	/*int i, j = 0;
 	SER_init();
 	configureGPIO();
