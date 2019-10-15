@@ -13,6 +13,8 @@ void initialize() {
 	SER_init();
 	configureGPIO(X_AXIS);
 	configureGPIO(Y_AXIS);
+	resetEDPins(X_AXIS);
+	resetEDPins(Y_AXIS);
 }
 
 int main() {

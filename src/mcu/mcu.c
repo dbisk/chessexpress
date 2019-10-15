@@ -31,17 +31,17 @@ int configureGPIO(int axis) {
 
 int resetEDPins(int axis) {
   if (axis == X_AXIS) {
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_STP);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_DIR);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_MS1);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_MS2);
-    LPC_GPIO0->DATA |= (1 <<  GPIO0_STEP_EN);
+    setPinGPIO0(GPIO0_STEP_STP, PIN_LOW);
+    setPinGPIO0(GPIO0_STEP_DIR, PIN_LOW);
+    setPinGPIO0(GPIO0_STEP_MS1, PIN_LOW);
+    setPinGPIO0(GPIO0_STEP_MS2, PIN_LOW);
+    setPinGPIO0(GPIO0_STEP_EN, PIN_HIGH);
   } else if (axis == Y_AXIS) {
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_STP);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_DIR);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_MS1);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_MS2);
-    LPC_GPIO1->DATA |= (1 <<  GPIO1_STEP_EN);
+    setPinGPIO1(GPIO1_STEP_STP, PIN_LOW);
+    setPinGPIO1(GPIO1_STEP_DIR, PIN_LOW);
+    setPinGPIO1(GPIO1_STEP_MS1, PIN_LOW);
+    setPinGPIO1(GPIO1_STEP_MS2, PIN_LOW);
+    setPinGPIO1(GPIO1_STEP_EN, PIN_HIGH);
   } else {
     return 0; // invalid axis
   }
