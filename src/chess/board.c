@@ -4,7 +4,7 @@
  * 
  * @author Dean Biskup and Mitalee Bharadwaj
  * 
- * University of Illinois, ADSL (ECE 395), 2019
+ * University of Illinois, ADSL (ECE 395), Fall 2019
  */
 
 #include <stdlib.h>
