@@ -11,19 +11,15 @@
 #define _MOTOR_MCU_H_
 
 /* define pins for the motor control signals */
-/* on GPIO0, avoid pins 0, 1, 4, 5, and 10 */
-#define GPIO0_STEP_STP  2
-#define GPIO0_STEP_DIR  3
-#define GPIO0_STEP_MS1  6
-#define GPIO0_STEP_MS2  8
-#define GPIO0_STEP_EN   9
+/* on GPIO0 (12 bits), avoid pins 0, 1, 4, 5, and 10 */
+#define X_AXIS_STP  2
+#define X_AXIS_DIR  3
+#define X_AXIS_EN   7
+#define Y_AXIS_STP  5
+#define Y_AXIS_DIR  6
+#define Y_AXIS_EN   11
 
-/* on GPIO1, avoid pins 3, 4, 5, 6, and 7 */
-#define GPIO1_STEP_STP  0
-#define GPIO1_STEP_DIR  1
-#define GPIO1_STEP_MS1  2
-#define GPIO1_STEP_MS2  8
-#define GPIO1_STEP_EN   9
+/* on GPIO1 (10 bits), avoid pins 3, 4, 5, 6, and 7 */
 
 /* define other useful things for motor control */
 #define X_AXIS          0
@@ -32,7 +28,7 @@
 #define BACKWARD        1
 
 /* define stepper motor distances */
-#define HALF_SQUARE     323
+#define HALF_SQUARE     8 * 323
 #define FULL_SQUARE     (HALF_SQUARE * 2 + 1)
 
 /**

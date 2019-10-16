@@ -4,6 +4,7 @@
 
 /* include user defined files */
 #include "mcu/mcu.h"
+#include "lpc_utils.h"
 
 /* Import external functions from Serial.c file                               */
 extern void SER_init (void);
@@ -19,13 +20,20 @@ void initialize() {
 
 int main() {
 	initialize();
+  // MORE TESTING
+  
   // TESTING
-  moveMotor(X_AXIS, 8, BACKWARD); // move 4 half squares forward
-  // moveMotor(X_AXIS, 8, BACKWARD); // move 8 half squares backward
+  lpcWait(0xFFFFF);
+  // setPinGPIO0(GPIO0_STEP_EN, PIN_HIGH);
+  // moveMotor(X_AXIS, 4, FORWARD); // move 4 half squares forward
+  setPinGPIO0(GPIO0_STEP_MS1, PIN_LOW);
+  setPinGPIO0(GPIO0_STEP_MS2, PIN_LOW);
+  moveMotor(X_AXIS, 8, BACKWARD); // move 8 half squares backward
   int i = 0;
   for (i = 0; i < 0xFFFFFF; i++) ;
-  moveMotor(X_AXIS, -1, FORWARD); // move indefinitely
-	/*int i, j = 0;
+  // moveMotor(X_AXIS, -1, FORWARD); // move indefinitely
+  while(1) ;
+  /*int i, j = 0;
 	SER_init();
 	configureGPIO();
 	while (1)

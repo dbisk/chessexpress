@@ -33,14 +33,14 @@ int resetEDPins(int axis) {
   if (axis == X_AXIS) {
     setPinGPIO0(GPIO0_STEP_STP, PIN_LOW);
     setPinGPIO0(GPIO0_STEP_DIR, PIN_LOW);
-    setPinGPIO0(GPIO0_STEP_MS1, PIN_LOW);
-    setPinGPIO0(GPIO0_STEP_MS2, PIN_LOW);
+    setPinGPIO0(GPIO0_STEP_MS1, PIN_HIGH);
+    setPinGPIO0(GPIO0_STEP_MS2, PIN_HIGH);
     setPinGPIO0(GPIO0_STEP_EN, PIN_HIGH);
   } else if (axis == Y_AXIS) {
     setPinGPIO1(GPIO1_STEP_STP, PIN_LOW);
     setPinGPIO1(GPIO1_STEP_DIR, PIN_LOW);
-    setPinGPIO1(GPIO1_STEP_MS1, PIN_LOW);
-    setPinGPIO1(GPIO1_STEP_MS2, PIN_LOW);
+    setPinGPIO1(GPIO1_STEP_MS1, PIN_HIGH);
+    setPinGPIO1(GPIO1_STEP_MS2, PIN_HIGH);
     setPinGPIO1(GPIO1_STEP_EN, PIN_HIGH);
   } else {
     return 0; // invalid axis
@@ -56,9 +56,9 @@ int moveMotor(int axis, int distance, int direction) {
     setPinGPIO0(GPIO0_STEP_DIR, direction); // set the direction
     while (numSteps != 0) { // @TODO: change this to include distance
       setPinGPIO0(GPIO0_STEP_STP, PIN_HIGH);
-      lpcWait(0x07FF); // @TODO: test this time
+      lpcWait(0x7FFF); // @TODO: test this time // 0x07FF
       setPinGPIO0(GPIO0_STEP_STP, PIN_LOW);
-      lpcWait(0x07FF);
+      lpcWait(0x7FFF);
       numSteps--;
     }
   } else if (axis == Y_AXIS) {
