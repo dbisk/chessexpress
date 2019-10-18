@@ -28,7 +28,7 @@
 #define BACKWARD        1
 
 /* define stepper motor distances */
-#define HALF_SQUARE     8 * 323
+#define HALF_SQUARE     323 // multiply by 8 if using half steps
 #define FULL_SQUARE     (HALF_SQUARE * 2 + 1)
 
 /**
