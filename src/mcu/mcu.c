@@ -47,7 +47,7 @@ int moveMotor(int axis, int distance, int direction) {
   // assume GPIOs have been configured
   int numSteps = distance * HALF_SQUARE;
   if (axis == X_AXIS) {
-    setPinGPIO0(X_AXIS_EN, PIN_LOW); // enable the motor control
+    setPinGPIO0(X_AXIS_EN, PIN_LOW); // enable the motor control (active low)
     setPinGPIO0(X_AXIS_DIR, direction); // set the direction
     while (numSteps != 0) {
       setPinGPIO0(X_AXIS_STP, PIN_HIGH);
@@ -57,7 +57,7 @@ int moveMotor(int axis, int distance, int direction) {
       numSteps--;
     }
   } else if (axis == Y_AXIS) {
-    setPinGPIO0(Y_AXIS_EN, PIN_LOW); // enable the motor control
+    setPinGPIO0(Y_AXIS_EN, PIN_LOW); // enable the motor control (active low)
     setPinGPIO0(Y_AXIS_DIR, direction); // set the direction
     while (numSteps != 0) {
       setPinGPIO0(Y_AXIS_STP, PIN_HIGH);

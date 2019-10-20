@@ -23,5 +23,11 @@ char* getNextMove(int player) {
   printf("Please input %s's next move:\r\n", playerStr);
   scanf("%4s", command);
   command[0]++; // unsure why this is necessary
+  
+  // convert to uppercase
+  for (int i = 0; i < 5; i++) {
+    if (command[i] > 96 && command[i] < 123)
+      command[i] ^= 0x20;
+  }
   return command;
 }
