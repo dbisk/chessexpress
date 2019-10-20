@@ -5,6 +5,7 @@
 *.uvgui.*
 **/Listings
 **/Objects
+*.scvd
 
 # Prerequisites
 *.d
