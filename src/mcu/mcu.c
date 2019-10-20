@@ -8,20 +8,20 @@
  */
 #include "LPC11xx.h"
 #include "mcu.h"
+#include "../lpc_utils.h"
+
+// For 1/8 step, 0x7FF. For full step, 0x3FFF
+#define WAIT_TIME 0x3FFF
 
 int configureGPIO(int axis) {
   if (axis == X_AXIS) {
-    LPC_GPIO0->DIR |= (1<<GPIO0_STEP_STP);
-    LPC_GPIO0->DIR |= (1<<GPIO0_STEP_DIR);
-    LPC_GPIO0->DIR |= (1<<GPIO0_STEP_MS1);
-    LPC_GPIO0->DIR |= (1<<GPIO0_STEP_MS2);
-    LPC_GPIO0->DIR |= (1<<GPIO0_STEP_EN);
+    LPC_GPIO0->DIR |= (1<<X_AXIS_STP);
+    LPC_GPIO0->DIR |= (1<<X_AXIS_DIR);
+    LPC_GPIO0->DIR |= (1<<X_AXIS_EN);
   } else if (axis == Y_AXIS) {
-    LPC_GPIO1->DIR |= (1<<GPIO1_STEP_STP);
-    LPC_GPIO1->DIR |= (1<<GPIO1_STEP_DIR);
-    LPC_GPIO1->DIR |= (1<<GPIO1_STEP_MS1);
-    LPC_GPIO1->DIR |= (1<<GPIO1_STEP_MS2);
-    LPC_GPIO1->DIR |= (1<<GPIO1_STEP_EN);
+    LPC_GPIO0->DIR |= (1<<Y_AXIS_STP);
+    LPC_GPIO0->DIR |= (1<<Y_AXIS_DIR);
+    LPC_GPIO0->DIR |= (1<<Y_AXIS_EN);
   } else {
     return 0; // invalid axis
   }
@@ -30,17 +30,13 @@ int configureGPIO(int axis) {
 
 int resetEDPins(int axis) {
   if (axis == X_AXIS) {
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_STP);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_DIR);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_MS1);
-    LPC_GPIO0->DATA &= ~(1 << GPIO0_STEP_MS2);
-    LPC_GPIO0->DATA |= (1 <<  GPIO0_STEP_EN);
+    setPinGPIO0(X_AXIS_STP, PIN_LOW);
+    setPinGPIO0(X_AXIS_DIR, PIN_LOW);
+    setPinGPIO0(X_AXIS_EN, PIN_HIGH);
   } else if (axis == Y_AXIS) {
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_STP);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_DIR);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_MS1);
-    LPC_GPIO1->DATA &= ~(1 << GPIO1_STEP_MS2);
-    LPC_GPIO1->DATA |= (1 <<  GPIO1_STEP_EN);
+    setPinGPIO0(Y_AXIS_STP, PIN_LOW);
+    setPinGPIO0(Y_AXIS_DIR, PIN_LOW);
+    setPinGPIO0(Y_AXIS_EN, PIN_HIGH);
   } else {
     return 0; // invalid axis
   }
@@ -48,5 +44,33 @@ int resetEDPins(int axis) {
 }
 
 int moveMotor(int axis, int distance, int direction) {
-  return 1;
+  // assume GPIOs have been configured
+  int numSteps = distance * HALF_SQUARE;
+  if (axis == X_AXIS) {
+    setPinGPIO0(X_AXIS_EN, PIN_LOW); // enable the motor control
+    setPinGPIO0(X_AXIS_DIR, direction); // set the direction
+    while (numSteps != 0) {
+      setPinGPIO0(X_AXIS_STP, PIN_HIGH);
+      lpcWait(WAIT_TIME);
+      setPinGPIO0(X_AXIS_STP, PIN_LOW);
+      lpcWait(WAIT_TIME);
+      numSteps--;
+    }
+  } else if (axis == Y_AXIS) {
+    setPinGPIO0(Y_AXIS_EN, PIN_LOW); // enable the motor control
+    setPinGPIO0(Y_AXIS_DIR, direction); // set the direction
+    while (numSteps != 0) {
+      setPinGPIO0(Y_AXIS_STP, PIN_HIGH);
+      lpcWait(WAIT_TIME);
+      setPinGPIO0(Y_AXIS_STP, PIN_LOW);
+      lpcWait(WAIT_TIME);
+      numSteps--;
+    }
+  } else {
+    return 0; // invalid axis
+  }
+
+  // reset the ED pins to their default state
+  resetEDPins(axis);
+  return 1; // success
 }
