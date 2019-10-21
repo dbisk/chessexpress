@@ -18,6 +18,7 @@
 #define Y_AXIS_STP  5
 #define Y_AXIS_DIR  6
 #define Y_AXIS_EN   11
+#define MAGNET_PIN  8
 
 /* on GPIO1 (10 bits), avoid pins 3, 4, 5, 6, and 7 */
 
@@ -63,5 +64,12 @@ int resetEDPins(int axis);
  * @param direction - the direction to move
  */
 int moveMotor(int axis, int distance, int direction);
+
+/**
+ * resetMotor()
+ * 
+ * resets the motor's position to the origin (top left corner of chessboard)
+ */
+void resetMotor();
 
 #endif // _MOTOR_MCU_H_

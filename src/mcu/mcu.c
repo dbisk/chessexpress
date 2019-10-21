@@ -25,6 +25,7 @@ int configureGPIO(int axis) {
   } else {
     return 0; // invalid axis
   }
+  LPC_GPIO0->DIR |= (1 << MAGNET_PIN);
   return 1; // success
 }
 

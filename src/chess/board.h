@@ -35,6 +35,19 @@ typedef struct {
 } pos_t;
 
 /**
+ * vec_t - a struct that holds two pos_ts, representing a vector on the
+ * chessboard.
+ * 
+ * Fields:
+ *    fromLoc - the position we are going from
+ *    toLoc - the position we are going to
+ */
+typedef struct {
+  pos_t fromLoc;
+  pos_t toLoc;
+} vec_t;
+
+/**
  * newBoard()
  * 
  * returns a fresh board that is the starting state of a chess game.
