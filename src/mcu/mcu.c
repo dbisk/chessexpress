@@ -75,3 +75,7 @@ int moveMotor(int axis, int distance, int direction) {
   resetEDPins(axis);
   return 1; // success
 }
+
+void resetMotor(void) {
+  return;
+}

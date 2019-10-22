@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include "string.h"
-#include "../chess/boardConstants.h"
+#include "../chess/board.h"
 #include "interface.h"
 
 /* a static array we'll use to hold the command */
@@ -30,4 +30,27 @@ char* getNextMove(int player) {
       command[i] ^= 0x20;
   }
   return command;
+}
+
+void printBoard(board_t board) {
+  for (int i = -2; i < BOARD_SIZE + 2; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (i == 0 || i == BOARD_SIZE) {
+        printf("|");
+      }
+      char c;
+      if (i < 0) {
+        c = board.graveyard[-1*i][j];
+      } else if (i >= BOARD_SIZE) {
+        c = board.graveyard[i-5][j];
+      } else {
+        c = board.squares[i][j];
+      }
+      if (c == CLEAR) {
+        c = '_';
+      }
+      printf("%c", c);
+    }
+    printf("\r\n");
+  }
 }

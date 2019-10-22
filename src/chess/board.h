@@ -10,19 +10,6 @@
 #include "boardConstants.h"
 
 /**
- * board_t - a struct to hold the state of a chessboard.
- * 
- * Fields:
- *    squares - a 2-D array holding the state of each square on the board. The 
- *              data is arranged such that the bottom byte holds the type of 
- *              piece, and the second byte holds the color. Any more 
- *              significant bytes are disregarded.
- */
-typedef struct {
-  int squares[BOARD_SIZE][BOARD_SIZE];
-} board_t;
-
-/**
  * pos_t - a struct that holds an x-y position on the chessboard
  * 
  * Fields:
@@ -48,11 +35,29 @@ typedef struct {
 } vec_t;
 
 /**
+ * board_t - a struct to hold the state of a chessboard.
+ * 
+ * Fields:
+ *    squares - a 2-D array holding the state of each square on the board. The 
+ *              data is arranged such that the bottom byte holds the type of 
+ *              piece, and the second byte holds the color. Any more 
+ *              significant bytes are disregarded.
+ * 
+ *    graveyard - a 2-D array holding the graveyard pieces. Columns 3 & 4 will
+ *                be for white pieces, and columns 1 & 2 for black pieces.
+ */
+typedef struct {
+  int squares[BOARD_SIZE][BOARD_SIZE];
+  int graveyard[4][BOARD_SIZE];
+  pos_t nextGraveWhite, nextGraveBlack;
+} board_t;
+
+/**
  * newBoard()
  * 
  * returns a fresh board that is the starting state of a chess game.
  */
-board_t newBoard();
+board_t newBoard(void);
 
 /**
  * makeMove(board, player, fromPos, toPos)
@@ -81,5 +86,26 @@ int makeMove(board_t* board, int player, pos_t fromPos, pos_t toPos);
  * previously vetted for legality.
  */
 int makeMoveNoCheck(board_t* board, pos_t fromPos, pos_t toPos);
+
+/**
+ * isSquareClear(board, position)
+ * 
+ * Checks if the given position is clear.
+ * 
+ * @param board pointer to the board we're checking on
+ * @param position pos_t of the position to check
+ * @return 1 if position is clear, 0 otherwise
+ */
+int isSquareClear(board_t* board, pos_t position);
+
+/**
+ * getNextGraveSpot(board, player)
+ * 
+ * Gets the next grave position for the provided color.
+ * 
+ * @param board pointer to the board we're checking on
+ * @param color the color of the grave position we are checking for
+ */
+pos_t getNextGraveSpot(board_t* board, int color);
 
 #endif // CHESS_BOARD_H_

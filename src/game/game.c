@@ -7,6 +7,7 @@
  * University of Illinois, ADSL (ECE 395), Fall 2019.
  */
 #include <stdlib.h>
+#include <string.h>
 #include "../chess/board.h"
 #include "../serial/interface.h"
 #include "../mcu/mcu.h"
@@ -15,6 +16,7 @@
 
 /* declare static data that needs to be stored */
 static board_t chessboard;
+static int captureFlag;
 
 /* declare static helper functions */
 static int getRowFromChar(char c);
@@ -45,7 +47,23 @@ void gameLoop(int mode) {
 
     if (mode == SCRIPTED) {
       // just move the motors and update the board state
+      if (!isSquareClear(&chessboard, nextMovePar.toLoc)) {
+        // need to move the captured piece to the graveyard first. we can think
+        // of the graveyard as columns -1, -2 for black and 8, 9 for white
+        pos_t graveSpot = getNextGraveSpot(&chessboard, PLAYER(chessboard.squares[nextMovePar.toLoc.col][nextMovePar.toLoc.col]));
+        if (graveSpot.col < 2) {
+          // black side
+          graveSpot.col = -1 * graveSpot.col;
+        } else {
+          // white side
+          graveSpot.col = 5 + graveSpot.col;
+        }
+        vec_t graveMove = {nextMovePar.toLoc, graveSpot};
+        executeMove(&chessboard, graveMove);
+      }
       executeMove(&chessboard, nextMovePar);
+
+      // update the board representation
       makeMoveNoCheck(&chessboard, nextMovePar.fromLoc, nextMovePar.toLoc);
     }
 
@@ -101,6 +119,7 @@ int executeMove(board_t* board, vec_t move) {
   setPinGPIO0(MAGNET_PIN, PIN_LOW);
   // reset the motor
   resetMotor();
+  return 0;
 }
 
 /**
@@ -128,6 +147,7 @@ vec_t parseMove(int mode, char* command) {
       // a capture happened
       toPos.col = getColFromChar(command[3]);
       toPos.row = getRowFromChar(command[4]);
+      captureFlag = 1;
     } else {
       toPos.col = getColFromChar(command[2]);
       toPos.row = getRowFromChar(command[3]);

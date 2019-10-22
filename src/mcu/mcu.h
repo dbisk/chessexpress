@@ -70,6 +70,6 @@ int moveMotor(int axis, int distance, int direction);
  * 
  * resets the motor's position to the origin (top left corner of chessboard)
  */
-void resetMotor();
+void resetMotor(void);
 
 #endif // _MOTOR_MCU_H_

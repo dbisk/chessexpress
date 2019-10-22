@@ -11,7 +11,7 @@
 #define _SERIAL_INTERFACE_H_
 
 /**
- * getNextMove()
+ * getNextMove(player)
  * 
  * Prompts the next move from the serial port, expects algebraic notation. 
  * 
@@ -20,5 +20,14 @@
  * notation, all lower case
  */
 char* getNextMove(int player);
+
+/**
+ * printBoard(board)
+ * 
+ * Prints the current state of the board to the serial port.
+ * 
+ * @param board the board to print
+ */
+void printBoard(board_t board);
 
 #endif // _SERIAL_INTERFACE_H_
