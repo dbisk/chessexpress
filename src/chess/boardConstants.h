@@ -9,12 +9,12 @@
 #define _CHESS_BOARDCONSTANTS_H_
 
 /* the various pieces */
-#define KING    1
-#define QUEEN   2
-#define BISHOP  3
-#define KNIGHT  4
-#define ROOK    5
-#define PAWN    6
+#define KING    'K'
+#define QUEEN   'Q'
+#define BISHOP  'B'
+#define KNIGHT  'N'
+#define ROOK    'R'
+#define PAWN    'P'
 #define CLEAR   0
 
 /* the player */

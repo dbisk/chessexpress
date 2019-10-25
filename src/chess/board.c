@@ -17,52 +17,49 @@ static int isValidMoveKnight(pos_t fromPos, pos_t toPos);
 static int isValidMovePawn(pos_t fromPos, pos_t toPos, int color);
 static void updateGraveSpot(board_t* board);
 
-board_t newBoard(void) {
-  board_t fresh;
-  fresh.nextGraveBlack.col = 0;
-  fresh.nextGraveBlack.row = 0;
-  fresh.nextGraveWhite.col = 2;
-  fresh.nextGraveWhite.row = 0;
-
+void resetBoard(board_t* fresh) {
+  fresh->nextGraveBlack.col = 0;
+  fresh->nextGraveBlack.row = 0;
+  fresh->nextGraveWhite.col = 2;
+  fresh->nextGraveWhite.row = 0;
+  
   // clear all the squares
   int i, j;
   for (i = 0; i < BOARD_SIZE; i++) {
     for (j = 0; j < BOARD_SIZE; j++) {
-      fresh.squares[i][j] = CLEAR;
+      fresh->squares[i][j] = CLEAR;
     }
   }
 
   for (i = 0; i < 4; i++) {
     for (j = 0; j < BOARD_SIZE; j++) {
-      fresh.graveyard[i][j] = CLEAR;
+      fresh->graveyard[i][j] = CLEAR;
     }
   }
 
   // fill in the relevants squares with the pieces - 32 total
   for (i = 0; i < BOARD_SIZE; i++) {
     // fill in pawns across the columns
-    fresh.squares[i][ROW_2] = PIECE(WHITE, PAWN);
-    fresh.squares[i][ROW_7] = PIECE(BLACK, PAWN);
+    fresh->squares[i][ROW_2] = PIECE(WHITE, PAWN);
+    fresh->squares[i][ROW_7] = PIECE(BLACK, PAWN);
   }
 
-  fresh.squares[COL_A][ROW_1] = PIECE(WHITE, ROOK);
-  fresh.squares[COL_A][ROW_8] = PIECE(BLACK, ROOK);
-  fresh.squares[COL_B][ROW_1] = PIECE(WHITE, KNIGHT);
-  fresh.squares[COL_B][ROW_8] = PIECE(BLACK, KNIGHT);
-  fresh.squares[COL_C][ROW_1] = PIECE(WHITE, BISHOP);
-  fresh.squares[COL_C][ROW_8] = PIECE(BLACK, BISHOP);
-  fresh.squares[COL_D][ROW_1] = PIECE(WHITE, QUEEN);
-  fresh.squares[COL_D][ROW_8] = PIECE(BLACK, QUEEN);
-  fresh.squares[COL_E][ROW_1] = PIECE(WHITE, KING);
-  fresh.squares[COL_E][ROW_8] = PIECE(BLACK, KING);
-  fresh.squares[COL_F][ROW_1] = PIECE(WHITE, BISHOP);
-  fresh.squares[COL_F][ROW_8] = PIECE(BLACK, BISHOP);
-  fresh.squares[COL_G][ROW_1] = PIECE(WHITE, KNIGHT);
-  fresh.squares[COL_G][ROW_8] = PIECE(BLACK, KNIGHT);
-  fresh.squares[COL_H][ROW_1] = PIECE(WHITE, ROOK);
-  fresh.squares[COL_H][ROW_8] = PIECE(BLACK, ROOK);
-
-  return fresh;
+  fresh->squares[COL_A][ROW_1] = PIECE(WHITE, ROOK);
+  fresh->squares[COL_A][ROW_8] = PIECE(BLACK, ROOK);
+  fresh->squares[COL_B][ROW_1] = PIECE(WHITE, KNIGHT);
+  fresh->squares[COL_B][ROW_8] = PIECE(BLACK, KNIGHT);
+  fresh->squares[COL_C][ROW_1] = PIECE(WHITE, BISHOP);
+  fresh->squares[COL_C][ROW_8] = PIECE(BLACK, BISHOP);
+  fresh->squares[COL_D][ROW_1] = PIECE(WHITE, QUEEN);
+  fresh->squares[COL_D][ROW_8] = PIECE(BLACK, QUEEN);
+  fresh->squares[COL_E][ROW_1] = PIECE(WHITE, KING);
+  fresh->squares[COL_E][ROW_8] = PIECE(BLACK, KING);
+  fresh->squares[COL_F][ROW_1] = PIECE(WHITE, BISHOP);
+  fresh->squares[COL_F][ROW_8] = PIECE(BLACK, BISHOP);
+  fresh->squares[COL_G][ROW_1] = PIECE(WHITE, KNIGHT);
+  fresh->squares[COL_G][ROW_8] = PIECE(BLACK, KNIGHT);
+  fresh->squares[COL_H][ROW_1] = PIECE(WHITE, ROOK);
+  fresh->squares[COL_H][ROW_8] = PIECE(BLACK, ROOK);
 }
 
 int isSquareClear(board_t* board, pos_t position) {

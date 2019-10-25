@@ -46,18 +46,20 @@ typedef struct {
  *    graveyard - a 2-D array holding the graveyard pieces. Columns 3 & 4 will
  *                be for white pieces, and columns 1 & 2 for black pieces.
  */
-typedef struct {
+typedef struct board{
   int squares[BOARD_SIZE][BOARD_SIZE];
   int graveyard[4][BOARD_SIZE];
   pos_t nextGraveWhite, nextGraveBlack;
 } board_t;
 
 /**
- * newBoard()
+ * resetBoard()
  * 
- * returns a fresh board that is the starting state of a chess game.
+ * Resets the given board to the start of a new chess game.
+ * 
+ * @param board pointer to the board to reset
  */
-board_t newBoard(void);
+void resetBoard(board_t* board);
 
 /**
  * makeMove(board, player, fromPos, toPos)

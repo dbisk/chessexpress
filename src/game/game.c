@@ -15,18 +15,18 @@
 #include "game.h"
 
 /* declare static data that needs to be stored */
+// static board_t chessboard;
 static board_t chessboard;
-static int captureFlag;
 
 /* declare static helper functions */
 static int getRowFromChar(char c);
 static int getColFromChar(char c);
 static vec_t parseMove(int mode, char* command);
-static int executeMove(board_t* board, vec_t move);
+static int executeMove(vec_t move);
 
 void gameLoop(int mode) {
   // regardless of the mode, create a fresh chessboard
-  chessboard = newBoard();
+  resetBoard(&chessboard);
 
   // set up some data regarding the new chessboard
   int currentPlayer = WHITE;
@@ -37,6 +37,7 @@ void gameLoop(int mode) {
 
   // main game loop
   while(!gameOver) {
+    printBoard(&chessboard);
     // get the next move from the user
     char* nextMoveRaw = getNextMove(currentPlayer);
     if (nextMoveRaw[0] == '#') {
@@ -59,9 +60,9 @@ void gameLoop(int mode) {
           graveSpot.col = 5 + graveSpot.col;
         }
         vec_t graveMove = {nextMovePar.toLoc, graveSpot};
-        executeMove(&chessboard, graveMove);
+        executeMove(graveMove);
       }
-      executeMove(&chessboard, nextMovePar);
+      executeMove(nextMovePar);
 
       // update the board representation
       makeMoveNoCheck(&chessboard, nextMovePar.fromLoc, nextMovePar.toLoc);
@@ -85,7 +86,7 @@ void gameLoop(int mode) {
  * 
  * @param nextMovePar vec_t that holds the target movement vector
  */
-int executeMove(board_t* board, vec_t move) {
+int executeMove(vec_t move) {
   pos_t fromPos = move.fromLoc;
   pos_t toPos = move.toLoc;
   
@@ -147,7 +148,6 @@ vec_t parseMove(int mode, char* command) {
       // a capture happened
       toPos.col = getColFromChar(command[3]);
       toPos.row = getRowFromChar(command[4]);
-      captureFlag = 1;
     } else {
       toPos.col = getColFromChar(command[2]);
       toPos.row = getRowFromChar(command[3]);

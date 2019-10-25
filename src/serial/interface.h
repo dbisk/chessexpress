@@ -10,6 +10,8 @@
 #ifndef _SERIAL_INTERFACE_H_
 #define _SERIAL_INTERFACE_H_
 
+#include "../chess/board.h"
+
 /**
  * getNextMove(player)
  * 
@@ -28,6 +30,6 @@ char* getNextMove(int player);
  * 
  * @param board the board to print
  */
-void printBoard(board_t board);
+void printBoard(board_t* board);
 
 #endif // _SERIAL_INTERFACE_H_
