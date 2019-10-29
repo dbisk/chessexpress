@@ -1,6 +1,9 @@
 # editor settings
 **/.vscode
 
+# temporary python files
+__pycache__/
+
 # keil uvision temp files
 *.uvgui.*
 **/Listings
