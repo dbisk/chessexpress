@@ -30,17 +30,20 @@ def test_fn(args):
            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']]
   main_menu.set_art(board)
   main_menu.print()
-  # com = lpc_comm.LpcComm(args.port)
-  # com.close_port()
+  op = main_menu.get_option()
+  print("You chose option", op)
+  com = lpc_comm.LpcComm(args.port)
+  com.close_port()
 
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument('-p', '--port', required=True, type=str, help="the port that the chessboard is connected to")
+  parser.add_argument('--debug', action="store_true", help="pass this to run debugging tests")
   args = parser.parse_args()
 
-  test_fn(args)
-
-  
+  # optionally run debug test
+  if args.debug:
+    test_fn(args)
 
 if __name__ == "__main__":
   main()

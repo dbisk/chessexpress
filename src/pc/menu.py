@@ -60,7 +60,6 @@ class TextMenu():
       new_art = new_art + " - - - - - - - -\n"
       self.text_art = new_art
 
-
   def print(self):
     """Clears the terminal window and prints the menu"""
     q = pyfiglet.Figlet(font='slant')
@@ -77,5 +76,20 @@ class TextMenu():
       print(str(index) + ": " + opt)
     if (index > 0):
       # there were options, so ask which option
-      print("Please choose your option: ")
+      print("Please choose your option: ", end='')
+  
+  def get_option(self):
+    """Reads an option from the user and returns it"""
+    rej_string = "That is not a valid option! Try again: "
+    while True:
+      option = input()
+      try:
+        option = int(option)
+        if (option > len(self.options) or option < 0):
+          print(rej_string, end="")
+        else:
+          break
+      except ValueError:
+        print(rej_string, end="")
+    return option
 

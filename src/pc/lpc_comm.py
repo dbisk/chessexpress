@@ -4,6 +4,7 @@ Contains a class that represents the communication between this program and the 
 
 Usage:
   lpc_proc = LpcComm('/dev/ttyUSB0')
+  lpc_proc = LpcComm('COM5')
 """
 
 import serial
@@ -22,18 +23,81 @@ class LpcComm():
 
   def __init__(self, port: str):
     """Initializes a LpcComm object"""
-    self.ser = serial.Serial(port, 115200)
+    self.ser = serial.Serial() # this needs to be set so that the close_port call works in set_port
+    self.set_port(port)
+  
+  def set_port(self, port: str):
+    self.close_port()
+    try:
+      self.ser = serial.Serial(port, 115200)
+    except serial.serialutil.SerialException:
+      print("Connecting to Serial Failed, please try again.")
+      self.ser = serial.Serial()
   
   def open_port(self):
     """Opens the port if it is not already, else does nothing"""
-    if not self.ser.is_open():
+    if not self.ser.is_open:
       self.ser.open()
   
   def close_port(self):
     """Closes the port if it is open, else does nothing"""
-    if self.ser.is_open():
+    if self.ser.is_open:
       self.ser.close()
   
+  def read_line(self):
+    """Reads a line from the serial port"""
+    if not self.ser.is_open:
+      return -1
+    
+    result = self.ser.read_until()
+    return result
+  
+  def send_command(self, command: str):
+    """Sends a command to the processor via serial"""
+    if self.ser.is_open:
+      self.ser.write(command.encode('utf-8'))
+      self.ser.read_until('OK\r\n'.encode('utf-8'))
+  
+  def get_board(self):
+    """Requests the board state from the processor
+    
+    This assumes that the board state is provided in the following specific fashion.
+    
+    The board represented as
+    row/col a b c d e f g h 
+          1 r n b q k b n r
+          2 p p p p p p p p
+          3 _ _ _ _ _ _ _ _
+          4 _ _ _ _ _ _ _ _
+          5 _ _ _ _ _ _ _ _
+          6 _ _ _ _ _ _ _ _
+          7 P P P P P P P P
+          8 R N B Q K B N R
+
+    is sent via the byte-string
+    ('rnbqkbnr\\npppppppp\\n________\\n________\\n________\\n________\\nPPPPPPPP\\nRNBQKBNR\\nDONE\\r\\n')
+    """
+    if not self.ser.is_open:
+      return -1
+    
+    # send the command to the processor
+    self.send_command('b')
+
+    # read until the DONE string, then parse
+    dat = self.ser.read_until('DONE\r\n'.encode('utf-8'))
+    dat = dat.decode('utf-8')
+    board = [[]]
+    i = 0
+    for c in dat:
+      if c == '\n':
+        board.append([])
+      else:
+        board[i].append(c)
+    
+    # remove the last two rows
+    board.pop()
+    board.pop()
+    return board
 
 
 
