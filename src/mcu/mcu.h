@@ -15,9 +15,9 @@
 #define X_AXIS_STP  2
 #define X_AXIS_DIR  3
 #define X_AXIS_EN   7
-#define Y_AXIS_STP  5
-#define Y_AXIS_DIR  6
-#define Y_AXIS_EN   11
+#define Y_AXIS_STP  6
+#define Y_AXIS_DIR  5
+#define Y_AXIS_EN   9
 #define MAGNET_PIN  8
 
 /* on GPIO1 (10 bits), avoid pins 3, 4, 5, 6, and 7 */

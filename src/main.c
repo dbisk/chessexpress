@@ -50,6 +50,10 @@ int main() {
   moveMotor(X_AXIS, 4, FORWARD); // move 4 half squares forward
   printf(" OK\r\n");
   lpcWait(0x7FFFF);
+  printf("Moving Y Axis motor forward 2 squares... ");
+  moveMotor(Y_AXIS, 4, FORWARD); // move 4 half squares forward
+  printf(" OK\r\n");
+  lpcWait(0x7FFFF);
   /*printf("Moving X Axis motor backward 4 squares... ");
   moveMotor(X_AXIS, 8, BACKWARD); // move 8 half squares backward
   printf(" OK\r\n");
