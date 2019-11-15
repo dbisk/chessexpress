@@ -16,16 +16,20 @@ class TextMenu():
 
   The TextMenu class represents a menu that is intended to be printed to the
   console. Starts with a large, block ASCII art of Chess Express, some ascii art
-  (for us, this is the chessboard), then the menu options.
+  (for us, this is the chessboard), then the menu options. Quit is always an
+  option, at the very end of the list.
 
   Attributes:
     options: a list of strings with the possible options
     text_art: a string representation of the chessboard (or any other art)
   """
 
-  def __init__(self, options: list=None):
+  def __init__(self, options: list=None, op_type: str="NUM"):
     """Initializes TextMenu with options"""
+    self.op_type = op_type
     self.options = options.copy() if options is not None else []
+    if (op_type == "NUM"):
+      self.options.append("Quit")
     self.text_art = ""
 
   def set_art(self, board: list=None, art_str: str=None):
@@ -69,6 +73,10 @@ class TextMenu():
     print(q.renderText('Chess Express'))
     print(self.text_art) # print the text art
 
+    if (self.op_type == "INPUT"):
+      print(self.options[0], end=' ')
+      return
+    
     # enumerate the options and print
     index = 0
     for opt in self.options:
@@ -81,6 +89,9 @@ class TextMenu():
   def get_option(self):
     """Reads an option from the user and returns it"""
     rej_string = "That is not a valid option! Try again: "
+    if (self.op_type == "INPUT"):
+      return input()
+    
     while True:
       option = input()
       try:

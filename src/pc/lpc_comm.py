@@ -14,15 +14,16 @@ class LpcComm():
 
   The LpcComm class contains functions that are related to communicating with an
   LPC1114FN28/102 processor from NXP. All of the commands sent to and data
-  received from the processor are processed done using serial communication.
-  This LpcComm class is specifically geared toward the chess game.
+  received from the processor are done using serial communication. This LpcComm
+  class is specifically geared toward the chess game.
 
   Attributes:
     ser - serial object that is talking to the LPC
   """
 
-  def __init__(self, port: str):
+  def __init__(self, port: str, encoding: str='utf-8'):
     """Initializes a LpcComm object"""
+    self.encoding = encoding
     self.ser = serial.Serial() # this needs to be set so that the close_port call works in set_port
     self.set_port(port)
   
@@ -31,7 +32,7 @@ class LpcComm():
     try:
       self.ser = serial.Serial(port, 115200)
     except serial.serialutil.SerialException:
-      print("Connecting to Serial Failed, please try again.")
+      print("Connecting to Serial failed, please try again.")
       self.ser = serial.Serial()
   
   def open_port(self):
@@ -55,10 +56,10 @@ class LpcComm():
   def send_command(self, command: str):
     """Sends a command to the processor via serial"""
     if self.ser.is_open:
-      self.ser.write(command.encode('utf-8'))
-      self.ser.read_until('OK\r\n'.encode('utf-8'))
+      self.ser.write(command.encode(self.encoding))
+      self.ser.read_until('OK\r\n'.encode(self.encoding))
   
-  def get_board(self):
+  def get_board(self) -> list:
     """Requests the board state from the processor
     
     This assumes that the board state is provided in the following specific fashion.
@@ -84,11 +85,10 @@ class LpcComm():
     self.send_command('b')
 
     # read until the DONE string, then parse
-    dat = self.ser.read_until('DONE\r\n'.encode('utf-8'))
-    dat = dat.decode('utf-8')
+    data = self.ser.read_until('DONE\r\n'.encode(self.encoding))
+    data = data.decode(self.encoding)
     board = [[]]
-    i = 0
-    for c in dat:
+    for i, c in enumerate(data):
       if c == '\n':
         board.append([])
       else:
