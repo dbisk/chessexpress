@@ -82,27 +82,54 @@ Because of this we decided to upgrade to a [12V, 50kg holding force electromagne
 
 A comparison between the electromagnets we tried is below.
 
-| Holding Force | Voltage | Size | Thru 1/8" OK | Thru 1/4" OK |
-| ------------- | ------- | ---- | ------------ | ------------ |
-| 5 kg          | 5 V     |      | No           | No           |
-| 10 kg         | 5 V     |      | Very slight  | No           |
-| 50 kg         | 12 V    |      | Yes          | Untested     |
+| Holding Force | Voltage | Size | Thru 1/8" OK  | Thru 1/4" OK  |
+| ------------- | ------- | ---- | ------------- | ------------- |
+| 5 kg          | 5 V     |      | No            | No            |
+| 10 kg         | 5 V     |      | Very slight   | No            |
+| 30 kg         | 12 V    |      | Yes, but slow | No            |
+| 50 kg         | 12 V    |      | Yes           | Yes, but slow |
 
 ### Electromagnet Circuit
 
 Electromagnets are solenoids that generate a magnetic field when current flows through them. Since we are using steel plates on the bottom of our chess pieces, we don't care about the polarity of the magnetic field. Since the electromagnet both requires much more current than the ARM processor can output, as well as a different voltage, we use a simple transistor circuit and flyback diode to control it.
 
-(insert schematic here)
+<img src=img/whiteboard_em_circuit.jpg width="50%">
 
 With this circuit, powering the electromagnet on and off is pretty simple - just set the GPIO pin high when we want to turn on the electromagnet, and low otherwise.
 
 [5V Electromagnets from Adafruit]: https://www.digikey.com/product-detail/en/adafruit-industries-llc/3873/1528-2689-ND/9603612
 [12V, 50kg holding force electromagnet ordered off Amazon]: https://www.amazon.com/Suction-electric-Solenoid-cylinder-Electromagnet/dp/B07JL95XD8/
 
-## Software
+## Chess Game Software
 
-We are using the NXP LPC1114FN28/102 chip, which sports an ARM Cortex-M0 processor with 32 kB flash memory and 4kB SRAM. 
+### Overview
 
-## Credits and Sources
+We are using the NXP LPC1114FN28/102 chip, which sports an ARM Cortex-M0 processor with 32 kB flash memory and 4kB SRAM.
+
+### C Code in the ARM Microprocessor
+
+### The Python Application
+
+### Why Use Both Python and C?
+
+The LPC1114FN28/102 chip unfortunately only has 4kB of SRAM. In the initialization code for the chip, the stack size is set to half of that &mdash; 2kB. Unfortunately, this meant that when we tried to keep the board structure in memory on the microprocessor, whenever we would try to put anything else in the stack we would get overflow issues.
+
+It was a very perplexing problem: our board structure would get overwritten whenever we tried to print something to the serial console. It was only through tedious debugging that we realized it may be the stack being corrupted. This wasn't helped by the fact that the microprocessor, unlike modern laptops and desktops, doesn't have any way of telling you that its memory was corrupted.
+
+For this reason we decided to move the bulk of the memory-intensive processing to on off-board computer. Since the game will be run through a serial connection to a PC anyway, we decided to use Python to make a nicer user interface for the users. (See [Issue #7] in the GitHub repository for specific implementation details).
+
+[Issue #7]: https://github.com/dbisk/chessexpress/issues/7
+
+# Appendix
+
+## Bill of Materials and Parts List
+
+| Name      | Part Number | Quantity | Cost | Vendor |
+| ----- | ----- | ----- | ----- | ----- | 
+| Microprocessor | LPC1114FN28/102 | 1 | N/A | N/A (obsolete) |
+| FTDI Friend | 284 | 1 | $14.95 | Adafruit
+| NEMA-16 Stepper Motor | TODO | 3 | TODO | SparkFun |
+
+# Credits and Sources
 
 1. SparkFun Easy Driver "https://learn.sparkfun.com/tutorials/easy-driver-hook-up-guide/all"
