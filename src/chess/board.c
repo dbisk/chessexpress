@@ -15,42 +15,55 @@ static int isValidMove(board_t* board, int player, pos_t fromPos, pos_t toPos);
 static int isDiagonal(pos_t fromPos, pos_t toPos);
 static int isValidMoveKnight(pos_t fromPos, pos_t toPos);
 static int isValidMovePawn(pos_t fromPos, pos_t toPos, int color);
+static void updateGraveSpot(board_t* board);
 
-board_t newBoard() {
-  board_t fresh;
+void resetBoard(board_t* fresh) {
+  fresh->nextGraveBlack.col = 0;
+  fresh->nextGraveBlack.row = 0;
+  fresh->nextGraveWhite.col = 2;
+  fresh->nextGraveWhite.row = 0;
+  
   // clear all the squares
   int i, j;
   for (i = 0; i < BOARD_SIZE; i++) {
     for (j = 0; j < BOARD_SIZE; j++) {
-      fresh.squares[i][j] = CLEAR;
+      fresh->squares[i][j] = CLEAR;
+    }
+  }
+
+  for (i = 0; i < 4; i++) {
+    for (j = 0; j < BOARD_SIZE; j++) {
+      fresh->graveyard[i][j] = CLEAR;
     }
   }
 
   // fill in the relevants squares with the pieces - 32 total
   for (i = 0; i < BOARD_SIZE; i++) {
     // fill in pawns across the columns
-    fresh.squares[i][ROW_2] = PIECE(WHITE, PAWN);
-    fresh.squares[i][ROW_7] = PIECE(BLACK, PAWN);
+    fresh->squares[i][ROW_2] = PIECE(WHITE, PAWN);
+    fresh->squares[i][ROW_7] = PIECE(BLACK, PAWN);
   }
 
-  fresh.squares[COL_A][ROW_1] = PIECE(WHITE, ROOK);
-  fresh.squares[COL_A][ROW_8] = PIECE(BLACK, ROOK);
-  fresh.squares[COL_B][ROW_1] = PIECE(WHITE, KNIGHT);
-  fresh.squares[COL_B][ROW_8] = PIECE(BLACK, KNIGHT);
-  fresh.squares[COL_C][ROW_1] = PIECE(WHITE, BISHOP);
-  fresh.squares[COL_C][ROW_8] = PIECE(BLACK, BISHOP);
-  fresh.squares[COL_D][ROW_1] = PIECE(WHITE, QUEEN);
-  fresh.squares[COL_D][ROW_8] = PIECE(BLACK, QUEEN);
-  fresh.squares[COL_E][ROW_1] = PIECE(WHITE, KING);
-  fresh.squares[COL_E][ROW_8] = PIECE(BLACK, KING);
-  fresh.squares[COL_F][ROW_1] = PIECE(WHITE, BISHOP);
-  fresh.squares[COL_F][ROW_8] = PIECE(BLACK, BISHOP);
-  fresh.squares[COL_G][ROW_1] = PIECE(WHITE, KNIGHT);
-  fresh.squares[COL_G][ROW_8] = PIECE(BLACK, KNIGHT);
-  fresh.squares[COL_H][ROW_1] = PIECE(WHITE, ROOK);
-  fresh.squares[COL_H][ROW_8] = PIECE(BLACK, ROOK);
+  fresh->squares[COL_A][ROW_1] = PIECE(WHITE, ROOK);
+  fresh->squares[COL_A][ROW_8] = PIECE(BLACK, ROOK);
+  fresh->squares[COL_B][ROW_1] = PIECE(WHITE, KNIGHT);
+  fresh->squares[COL_B][ROW_8] = PIECE(BLACK, KNIGHT);
+  fresh->squares[COL_C][ROW_1] = PIECE(WHITE, BISHOP);
+  fresh->squares[COL_C][ROW_8] = PIECE(BLACK, BISHOP);
+  fresh->squares[COL_D][ROW_1] = PIECE(WHITE, QUEEN);
+  fresh->squares[COL_D][ROW_8] = PIECE(BLACK, QUEEN);
+  fresh->squares[COL_E][ROW_1] = PIECE(WHITE, KING);
+  fresh->squares[COL_E][ROW_8] = PIECE(BLACK, KING);
+  fresh->squares[COL_F][ROW_1] = PIECE(WHITE, BISHOP);
+  fresh->squares[COL_F][ROW_8] = PIECE(BLACK, BISHOP);
+  fresh->squares[COL_G][ROW_1] = PIECE(WHITE, KNIGHT);
+  fresh->squares[COL_G][ROW_8] = PIECE(BLACK, KNIGHT);
+  fresh->squares[COL_H][ROW_1] = PIECE(WHITE, ROOK);
+  fresh->squares[COL_H][ROW_8] = PIECE(BLACK, ROOK);
+}
 
-  return fresh;
+int isSquareClear(board_t* board, pos_t position) {
+  return (board->squares[position.col][position.row] == CLEAR);
 }
 
 int makeMove(board_t* board, int player, pos_t fromPos, pos_t toPos) {
@@ -64,9 +77,49 @@ int makeMoveNoCheck(board_t* board, pos_t fromPos, pos_t toPos) {
   int fromCol = fromPos.col;
   int fromRow = fromPos.row;
 
+  if (!isSquareClear(board, toPos)) {
+    // first move the piece to the graveyard
+    pos_t graveSpot = getNextGraveSpot(board, PLAYER(board->squares[toPos.col][toPos.row]));
+    board->graveyard[graveSpot.col][graveSpot.row] = board->squares[toPos.col][toPos.row];
+    updateGraveSpot(board);
+  }
+
   board->squares[toPos.col][toPos.row] = board->squares[fromCol][fromRow];
   board->squares[fromCol][fromRow] = CLEAR;
   return 1;
+}
+
+/**
+ * updateGraveSpot(board)
+ * 
+ * Helper function that updates the next available grave locations on the board.
+ */
+void updateGraveSpot(board_t* board) {
+  int i, j;
+  for (i = 0; i < 2; i++) { // black side 
+    for (j = 0; j < BOARD_SIZE; j++) {
+      if (board->graveyard[i][j] == CLEAR) {
+        board->nextGraveBlack.col = i;
+        board->nextGraveBlack.row = j;
+      }
+    }
+  }
+  for (i = 2; i < 4; i++) {
+    for (j = 0; j < BOARD_SIZE; j++) {
+      if (board->graveyard[i][j] == CLEAR) {
+        board->nextGraveWhite.col = i;
+        board->nextGraveWhite.row = j;
+      }
+    }
+  }
+}
+
+pos_t getNextGraveSpot(board_t* board, int color) {
+  if (color == WHITE) {
+    return board->nextGraveWhite;
+  } else {
+    return board->nextGraveBlack;
+  }
 }
 
 int isValidMove(board_t* board, int player, pos_t fromPos, pos_t toPos) {

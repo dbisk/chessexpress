@@ -25,6 +25,7 @@ int configureGPIO(int axis) {
   } else {
     return 0; // invalid axis
   }
+  LPC_GPIO0->DIR |= (1 << MAGNET_PIN);
   return 1; // success
 }
 
@@ -73,4 +74,8 @@ int moveMotor(int axis, int distance, int direction) {
   // reset the ED pins to their default state
   resetEDPins(axis);
   return 1; // success
+}
+
+void resetMotor(void) {
+  return;
 }
