@@ -22,6 +22,6 @@ The repository is laid out as follows:
 
 Assuming you have the rig completely set up (if not, see the next section for details), you can start up the python program to interface with the chessboard simply with
 ```
-python chessexpress.py
+python chessexpress.py --port COM5
 ```
 in the _____ folder.
