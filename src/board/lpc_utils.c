@@ -23,6 +23,10 @@ void setPinGPIO1(int pin, int level) {
     LPC_GPIO1->DATA |= (1<<pin);
 }
 
+int readPinGPIO0(int pin) {
+  return (LPC_GPIO0->DATA) & (1 << pin);
+}
+
 void lpcWait(int time) {
   int i;
   for (i = 0; i < time; i++) ;

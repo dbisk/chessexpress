@@ -27,7 +27,8 @@ class Game():
   FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
   RANKS = ['1', '2', '3', '4', '5', '6', '7', '8']
   
-  def __init__(self):
+  def __init__(self, communicator: lpc_comm.LpcComm):
+    self.communicator = communicator
     self.moves = []
     self.board_size = 8
     self.graveyard = []
@@ -144,7 +145,7 @@ class Game():
       # TODO: parse move to make sure it is valid
       # TODO: check chess rules?
       # TODO: send to LPC
-      # TODO: wait for LPC to return "OK"
+      self.communicator.send_command(str(from_pos[0]) + str(from_pos[1]) + str(to_pos[0]) + str(to_pos[1]))
 
       check = self.make_move(from_pos, to_pos)
 

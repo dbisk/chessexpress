@@ -33,6 +33,15 @@ void setPinGPIO0(int pin, int level);
 void setPinGPIO1(int pin, int level);
 
 /**
+ * readPinGPIO0(pin)
+ * 
+ * Reads the corresponding GPIO0 pin.
+ * 
+ * @param pin the pin number to read
+ */
+int readPinGPIO0(int pin);
+
+/**
  * lpcWait(time)
  * 
  * The processor spins not doing anything for given amount of time.

@@ -464,16 +464,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Chess</GroupName>
-          <Files>
-            <File>
-              <FileName>board.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\chess\board.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Main</GroupName>
           <Files>
             <File>

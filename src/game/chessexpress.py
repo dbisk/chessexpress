@@ -21,7 +21,11 @@ def test_fn(args):
   """Tests various functionalities of this program"""
   options = ["Start interactive game"]
   main_menu = menu.TextMenu(options)
-  g = game.Game()
+  print("-------------------------")
+  print("Testing LPC communication")
+  print("-------------------------")
+  com = lpc_comm.LpcComm(args.port)
+  g = game.Game(com)
   main_menu.set_art(art_str=g.board_to_str())
   main_menu.print()
   print("\n---------------------")
@@ -33,10 +37,6 @@ def test_fn(args):
   g.make_move((1, 3), (3, 3))
   print(g.board_to_str())
   print("Tested moves:", g.moves)
-  print("-------------------------")
-  print("Testing LPC communication")
-  print("-------------------------")
-  com = lpc_comm.LpcComm(args.port)
   com.close_port()
   print("Tests completed... Press [enter] to continue.")
   input() # force user to hit enter before continuing
@@ -51,7 +51,8 @@ def main():
   if args.debug:
     test_fn(args)
   
-  g = game.Game()
+  com = lpc_comm.LpcComm(args.port)
+  g = game.Game(com)
   g.start()
 
 if __name__ == "__main__":

@@ -16,9 +16,13 @@
 #define X_AXIS_DIR  3
 #define X_AXIS_EN   7
 #define Y_AXIS_STP  6
-#define Y_AXIS_DIR  5
+#define Y_AXIS_DIR  11
 #define Y_AXIS_EN   9
 #define MAGNET_PIN  8
+
+/* define pins for button motor control */
+#define X_AXIS_BUT  4
+#define Y_AXIS_BUT  5
 
 /* on GPIO1 (10 bits), avoid pins 3, 4, 5, 6, and 7 */
 
@@ -29,18 +33,21 @@
 #define BACKWARD        1
 
 /* define stepper motor distances */
-#define HALF_SQUARE     323 // multiply by 8 if using half steps
+#define HALF_SQUARE     105
 #define FULL_SQUARE     (HALF_SQUARE * 2 + 1)
 
+// For 1/8 step, 0x7FF. For full step, 0x5FFF
+#define WAIT_TIME 0xDFFF
+
+extern int magnetX;
+extern int magnetY;
+
 /**
- * configureGPIO(int axis)
+ * configureGPIO()
  * 
  * This function configures the GPIO pins for the given axis of motion. 
- * 
- * @param axis - the axis whose motor controls should be configured
- * @returns 1 if valid axis, 0 otherwise
  */
-int configureGPIO(int axis);
+void configureGPIO(void);
 
 /**
  * resetEDPins(int axis)
@@ -53,17 +60,14 @@ int configureGPIO(int axis);
 int resetEDPins(int axis);
 
 /**
- * moveMotor(axis, distance, direction)
+ * moveMotor(xPos, yPos)
  * 
- * Moves the motors along the given axis a certain distance, in half-squares, in
- * the given direction.
+ * Moves the motors along the given axis to the specified square.
  * 
- * @param axis - the axis whose motors will move
- * @param distance - the distance to move, in half-squares. If negative, will
- *                   move indefinitely.
- * @param direction - the direction to move
+ * @param xPos - the x position of the square to move the motor to
+ * @param yPos - the y position of the square to move the motor to
  */
-int moveMotor(int axis, int distance, int direction);
+int moveMotor(int xPos, int yPos);
 
 /**
  * resetMotor()
