@@ -58,4 +58,5 @@ class LpcComm():
     if self.ser.is_open:
       self.ser.write(command.encode(self.encoding))
       self.ser.read_until('ACK'.encode(self.encoding))
+      self.ser.read_until('ACK'.encode(self.encoding))
 

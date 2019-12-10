@@ -54,6 +54,7 @@ def main():
   com = lpc_comm.LpcComm(args.port)
   g = game.Game(com)
   g.start()
+  com.close_port()
 
 if __name__ == "__main__":
   main()
