@@ -11,19 +11,11 @@
 #ifndef _GAME_GAME_H_
 #define _GAME_GAME_H_
 
-/* defines for game modes */
-#define SCRIPTED        0
-#define INTERACTIVE     1
-
 /**
  * gameLoop()
  * 
- * The entry point to the game. Runs the mode of the game specified.
- * 
- * @param mode the mode of the game specified - either SCRIPTED or INTERACTIVE
+ * The entry point to the game.
  */
-void gameLoop(int mode);
-
-
+void gameLoop(void);
 
 #endif // _GAME_GAME_H_
