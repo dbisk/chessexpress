@@ -4,6 +4,9 @@
 # temporary python files
 __pycache__/
 
+# python virtual environment
+**/env/
+
 # keil uvision temp files
 *.uvgui.*
 **/Listings
