@@ -7,6 +7,9 @@ __pycache__/
 # python virtual environment
 **/env/
 
+# ignore secrets python file
+**/secrets.py
+
 # keil uvision temp files
 *.uvgui.*
 **/Listings
