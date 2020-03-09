@@ -4,7 +4,7 @@
 # This file is where you keep secret settings, passwords, and tokens!
 # If you put them in the code you risk committing that info and sharing it
 secrets = {
-  'ssid' = 'the ssid',
-  'password' = 'wifi password',
-  'timezone' = 'America/Chicago',
+  'ssid' : 'the ssid',
+  'password' : 'wifi password',
+  'timezone' : 'America/Chicago',
 }
